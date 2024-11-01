@@ -215,12 +215,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 itemBuilder: (context, index) => InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailsScreen(),
-                                        ));
+                                    if (homeController.productList[index].id !=
+                                        null) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductDetailsScreen(
+                                              productId: homeController
+                                                  .productList[index].id!,
+                                            ),
+                                          ));
+                                    }
                                   },
                                   child: Column(
                                     crossAxisAlignment:

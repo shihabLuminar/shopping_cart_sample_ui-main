@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart_may/controller/home_screen_controller.dart';
+import 'package:shopping_cart_may/controller/product_details_screen_controller.dart';
 import 'package:shopping_cart_may/view/home_screen/home_screen.dart';
 
 void main() {
@@ -14,9 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => HomeScreenController()),
         ChangeNotifierProvider(
-          create: (context) => HomeScreenController(),
-        )
+            create: (context) => ProductDetailsScreenController()),
       ],
       child: MaterialApp(
         home: HomeScreen(),
