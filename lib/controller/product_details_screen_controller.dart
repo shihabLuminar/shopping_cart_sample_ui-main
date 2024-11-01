@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping_cart_may/model/product_model.dart';
@@ -17,7 +15,7 @@ class ProductDetailsScreenController with ChangeNotifier {
     try {
       var response = await http.get(url);
       if (response.statusCode == 200) {
-        product = ProductModel.fromJson(jsonDecode(response.body));
+        product = singleProductmodel(response.body);
       }
     } catch (e) {
       print(e);
