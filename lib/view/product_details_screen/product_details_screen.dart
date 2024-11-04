@@ -1,3 +1,4 @@
+import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart_may/controller/product_details_screen_controller.dart';
@@ -103,23 +104,40 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   ),
                                 ),
                                 Text(
-                                  "title",
+                                  productDetailsController.product?.title
+                                          .toString() ??
+                                      "",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                 ),
                                 SizedBox(height: 20),
-                                Text(
-                                  "3/5 Rating",
-                                  style: TextStyle(
-                                      color: Colors.amber,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                Row(
+                                  children: [
+                                    RatingBar.readOnly(
+                                      filledIcon: Icons.star,
+                                      emptyIcon: Icons.star_border,
+                                      initialRating: productDetailsController
+                                              .product?.rating?.rate ??
+                                          0,
+                                      size: 20,
+                                      maxRating: 5,
+                                    ),
+                                    Text(
+                                      "(${productDetailsController.product?.rating?.count} Ratings)",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(height: 20),
                                 Text(
-                                  "description",
+                                  productDetailsController.product?.description
+                                          .toString() ??
+                                      "",
                                   style: TextStyle(
                                       color: Colors.grey,
                                       fontWeight: FontWeight.normal,
@@ -146,7 +164,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         color: Colors.grey, fontSize: 16),
                                   ),
                                   Text(
-                                    "RS price",
+                                    "\$ ${productDetailsController.product?.price}",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
