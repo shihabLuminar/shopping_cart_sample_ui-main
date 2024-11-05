@@ -181,15 +181,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                         .read<CartScreenController>()
                                         .addProduct(
                                             productDetailsController.product!);
-                                    context
-                                        .read<CartScreenController>()
-                                        .getAllProducts();
+                                    ;
 
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) => CartScreen(),
-                                    //     ));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CartScreen(),
+                                        ));
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(

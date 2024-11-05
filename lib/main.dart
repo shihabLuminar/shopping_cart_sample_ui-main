@@ -5,7 +5,10 @@ import 'package:shopping_cart_may/controller/home_screen_controller.dart';
 import 'package:shopping_cart_may/controller/product_details_screen_controller.dart';
 import 'package:shopping_cart_may/view/home_screen/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await CartScreenController.initDb();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => HomeScreenController()),
     ChangeNotifierProvider(create: (context) => CartScreenController()),
