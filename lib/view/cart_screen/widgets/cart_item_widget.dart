@@ -4,7 +4,7 @@ class CartItemWidget extends StatelessWidget {
   const CartItemWidget({
     super.key,
     required this.title,
-    required this.desc,
+    required this.amount,
     required this.qty,
     this.onIncrement,
     this.onDecrement,
@@ -12,7 +12,7 @@ class CartItemWidget extends StatelessWidget {
     this.image,
   });
   final String title;
-  final String desc;
+  final double amount;
   final String qty;
   final String? image;
   final VoidCallback? onIncrement;
@@ -44,15 +44,19 @@ class CartItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      "\$ ${amount}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                     SizedBox(height: 10),
                     Text(
-                      desc,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      title,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
                 ),

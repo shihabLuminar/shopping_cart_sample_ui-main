@@ -32,29 +32,104 @@ class _CartScreenState extends State<CartScreen> {
         ),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return CartItemWidget(
-                    title: cartScreenController.storedProducts[index]["name"],
-                    desc: cartScreenController.storedProducts[index]
-                        ["description"],
-                    qty: cartScreenController.storedProducts[index]["qty"]
-                        .toString(),
-                    image: cartScreenController.storedProducts[index]["image"],
-                    onIncrement: () {
-                      context.read<CartScreenController>().incrementQty();
-                    },
-                    onDecrement: () {
-                      context.read<CartScreenController>().decrementQty();
-                    },
-                    onRemove: () {
-                      context.read<CartScreenController>().removeProduct(
-                          cartScreenController.storedProducts[index]["id"]);
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(height: 15),
-                itemCount: cartScreenController.storedProducts.length)),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        return CartItemWidget(
+                          title: cartScreenController.storedProducts[index]
+                              ["name"],
+                          amount: cartScreenController.storedProducts[index]
+                              ["amount"],
+                          qty: cartScreenController.storedProducts[index]["qty"]
+                              .toString(),
+                          image: cartScreenController.storedProducts[index]
+                              ["image"],
+                          onIncrement: () {
+                            context.read<CartScreenController>().incrementQty(
+                                currentQty: cartScreenController
+                                    .storedProducts[index]["qty"],
+                                id: cartScreenController.storedProducts[index]
+                                    ["id"]);
+                          },
+                          onDecrement: () {
+                            context.read<CartScreenController>().decrementQty(
+                                currentQty: cartScreenController
+                                    .storedProducts[index]["qty"],
+                                id: cartScreenController.storedProducts[index]
+                                    ["id"]);
+                          },
+                          onRemove: () {
+                            context.read<CartScreenController>().removeProduct(
+                                cartScreenController.storedProducts[index]
+                                    ["id"]);
+                          },
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 15),
+                      itemCount: cartScreenController.storedProducts.length),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.withOpacity(.3),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total Amount :",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                          Text(
+                            "\$ ${cartScreenController.totalCartValue.toStringAsFixed(2)}",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.black,
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              "CHECKOUT",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              Icons.shopping_cart_checkout_rounded,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )),
       ),
     );
   }

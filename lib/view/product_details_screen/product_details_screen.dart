@@ -73,37 +73,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                  alignment: Alignment.topRight,
-                                  height: 400,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              productDetailsController
-                                                  .product!.image
-                                                  .toString()))),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(6, 10),
-                                              blurRadius: 10,
-                                              color:
-                                                  Colors.black.withOpacity(.5))
-                                        ]),
-                                    padding: EdgeInsets.all(10),
-                                    child: Icon(
-                                      Icons.favorite_outline,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ),
+                                productDetailsController.product != null
+                                    ? Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 20),
+                                        alignment: Alignment.topRight,
+                                        height: 400,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage(
+                                                    productDetailsController
+                                                        .product!.image
+                                                        .toString()))),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    offset: Offset(6, 10),
+                                                    blurRadius: 10,
+                                                    color: Colors.black
+                                                        .withOpacity(.5))
+                                              ]),
+                                          padding: EdgeInsets.all(10),
+                                          child: Icon(
+                                            Icons.favorite_outline,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
                                 Text(
                                   productDetailsController.product?.title
                                           .toString() ??
