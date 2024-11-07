@@ -31,6 +31,7 @@ class CartScreenController with ChangeNotifier {
     //     alreadyInCart = true;
     //   }
     // }
+    await getAllProducts();
 
     bool alreadyInCart = storedProducts.any(
       (element) => selectedProduct.id == element["productId"],
@@ -51,15 +52,15 @@ class CartScreenController with ChangeNotifier {
     }
   }
 
-  incrementQty({required int currentQty, required int id}) {
-    database
+  incrementQty({required int currentQty, required int id}) async {
+    await database
         .rawUpdate('UPDATE Cart SET qty = ? WHERE id = ?', [++currentQty, id]);
     getAllProducts();
   }
 
-  decrementQty({required int currentQty, required int id}) {
+  decrementQty({required int currentQty, required int id}) async {
     if (currentQty > 1) {
-      database.rawUpdate(
+      await database.rawUpdate(
           'UPDATE Cart SET qty = ? WHERE id = ?', [--currentQty, id]);
       getAllProducts();
     } else {}
@@ -78,5 +79,9 @@ class CartScreenController with ChangeNotifier {
     }
 
     log(totalCartValue.toString());
+  }
+
+  Future<void> clearTable() async {
+    await database.delete("Cart");
   }
 }

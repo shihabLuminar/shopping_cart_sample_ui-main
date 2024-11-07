@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shopping_cart_may/controller/cart_screen_controller.dart';
 import 'package:shopping_cart_may/view/cart_screen/widgets/cart_item_widget.dart';
+import 'package:shopping_cart_may/view/payment_success_screen/payment_success_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -99,30 +101,62 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black,
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "CHECKOUT",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              Icons.shopping_cart_checkout_rounded,
-                              color: Colors.white,
-                            )
-                          ],
+                      InkWell(
+                        onTap: () {
+                          Razorpay razorpay = Razorpay();
+                          var options = {
+                            // 'key': 'rzp_live_ILgsfZCZoFIKMb',
+                            'key': 'rzp_test_1DP5mmOlF5G5ag',
+                            'theme.color': '#BFECFF',
+                            'amount':
+                                "${cartScreenController.totalCartValue * 100}",
+                            'name': 'Luminar technolab',
+                            'description': 'Fine T-Shirt',
+                            'retry': {'enabled': false, 'max_count': 1},
+                            'send_sms_hash': true,
+                            'timeout': 120,
+                            'prefill': {
+                              'contact': '8888888888',
+                              'email': 'test@razorpay.com'
+                            },
+                            'external': {
+                              'wallets': ['paytm']
+                            }
+                          };
+
+                          razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+                              handlePaymentErrorResponse);
+                          razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                              handlePaymentSuccessResponse);
+                          razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                              handleExternalWalletSelected);
+                          razorpay.open(options);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black,
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                "CHECKOUT",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                Icons.shopping_cart_checkout_rounded,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -131,6 +165,54 @@ class _CartScreenState extends State<CartScreen> {
               ],
             )),
       ),
+    );
+  }
+
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    /*
+    * PaymentFailureResponse contains three values:
+    * 1. Error Code
+    * 2. Error Description
+    * 3. Metadata
+    * */
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+  }
+
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentSuccessScreen(),
+      ),
+      (route) => false,
+    );
+
+    context.read<CartScreenController>().clearTable();
+  }
+
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+        context, "External Wallet Selected", "${response.walletName}");
+  }
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    // set up the buttons
+    Widget continueButton = ElevatedButton(
+      child: const Text("Continue"),
+      onPressed: () {},
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
